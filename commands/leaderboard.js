@@ -15,10 +15,11 @@ module.exports = {
     local: true,
 	data: new SlashCommandBuilder()
 		.setName('leaderboard')
-		.setDescription('Get the leaderboard of certain topics')
-        .addSubcommand(command => command
-            .setName('mining_placing_crafting')
-        ),
+		.setDescription('Get the leaderboard of certain topics'),
+        // .addSubcommand(command => command
+        //     .setName('mining_placing_crafting')
+        //     .setDescription('Test')
+        // ),
 	async execute(interaction) {
         let desc = '';
         switch (interaction.options.getCommand()) {
