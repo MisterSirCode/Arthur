@@ -60,6 +60,6 @@ module.exports = {
             { name: 'Items Crafted', value: topTenString(crafting_data, "items_crafted"), inline: true, },
             { name: 'Blocks Placed', value: topTenString(building_data, "items_placed"), inline: true, },
         )
-		await interaction.reply({ embeds: [leaderboard], flags: MessageFlags.Ephemeral });
+		await interaction.reply({ embeds: [leaderboard] });
 	},
 };
