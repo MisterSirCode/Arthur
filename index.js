@@ -232,8 +232,8 @@ global.bot.on(Events.ClientReady, async () => {
     console.log(colors.bold('    + ').green + `Logged in as `.cyan + colors.bold(global.bot.user.tag).red + '\n');
     refreshPresence();
     setInterval(testForNewWorld, 30000);
-    setInterval(getPlayers, 60000);
-    setInterval(get_advanced_player_info, 600000);
+    setInterval(getPlayers, 3600000);
+    setInterval(get_advanced_player_info, 3600000);
 });
 
 global.bot.on(Events.InteractionCreate, async interaction => {
