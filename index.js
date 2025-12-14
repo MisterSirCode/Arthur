@@ -177,7 +177,6 @@ async function getPlayers() {
         repeat(1, [], [], (list, names) => {
             global.arthurdb.set(`deepworld.raw_players`, list);
             global.arthurdb.set(`deepworld.player_names`, names);
-            resolve();
         })
     } catch(e) {
 
@@ -216,7 +215,6 @@ async function get_advanced_player_info() {
         }
         repeat(0, {}, (list) => {
             global.arthurdb.set(`deepworld.players`, list);
-            resolve();
         });
     } catch(e) {
 
