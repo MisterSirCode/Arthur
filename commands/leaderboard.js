@@ -3,7 +3,7 @@ const { EmbedBuilder, SlashCommandBuilder, MessageFlags } = require('discord.js'
 function topTenString(list, target) {
     let finished = "";
     for (let i = 0; i < 10; i++) {
-        let item = list[i].value;
+        let item = list[i];
         finished += item.name + ' - ' + item[target] + '\n';
     }
     return finished;
@@ -38,7 +38,6 @@ module.exports = {
         let mining_data = removedAdmins.toSorted((a, b) => (a.items_mined > b.items_mined) ? -1 : 1);
         let crafting_data = removedAdmins.toSorted((a, b) => (a.items_crafted > b.items_crafted) ? -1 : 1);
         let building_data = removedAdmins.toSorted((a, b) => (a.items_placed > b.items_placed) ? -1 : 1);
-        console.log(mining_data);
         const leaderboard = new EmbedBuilder()
             .setTitle(`Leaderboard`)
             .setDescription(desc)

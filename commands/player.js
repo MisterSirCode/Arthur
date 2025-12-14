@@ -1,15 +1,23 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 let XMLHttpRequest = require('xhr2');
 
-let biomes = {
-    'plain': ['Temperate', 'https://media.discordapp.net/attachments/1041397042582388919/1323794948843372636/plain.png'],
-    'arctic': ['Arctic', 'https://cdn.discordapp.com/attachments/1041397042582388919/1323794949153755177/arctic.png'],
-    'hell': ['Hell', 'https://cdn.discordapp.com/attachments/1041397042582388919/1323794949979902022/hell.png'],
-    'desert': ['Desert', 'https://cdn.discordapp.com/attachments/1041397042582388919/1323794949782634569/desert.png'],
-    'brain': ['Brain', 'https://cdn.discordapp.com/attachments/1041397042582388919/1323794949405278308/brain.png'],
-    'space': ['Space', 'https://cdn.discordapp.com/attachments/1041397042582388919/1323794948629467198/space.png'],
-    'deep': ['Deep', 'https://cdn.discordapp.com/attachments/1041397042582388919/1323794949602283652/deep.png']
-}
+let crow = [
+    "<:crow1:1449855729904128111>",
+    "<:crow2:1449855728843100210>",
+    "<:crow3:1449855728016687146>",
+    "<:crow4:1449855727064846380>",
+    "<:crow5:1449855726255083703>",
+    "<:crow6:1449855724971757749>",
+]
+
+let crow_color = [
+    "58627B",
+    "C29E45",
+    "4E70BB",
+    "C64F4F",
+    "4B3A5B",
+    "94B1C9"
+]
 
 const levDist = (s, t) => {
     if (!s.length) return t.length;
@@ -28,54 +36,31 @@ const levDist = (s, t) => {
     return arr[t.length][s.length];
 };  
 
-function searchPlayers(page, info, callback) {
-    let xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            let json = xhttp.responseText;
-            let needsToEnd = false;
-            let raw = JSON.parse(json);
-            if (raw.length == 0) needsToEnd = true;
-            let distance = info[1] || 0;
-            let best = info[2] || {};
-            for (let i = 0; i < raw.length; i++) {
-                if (!needsToEnd) {
-                    let world = raw[i];
-                    let dist = levDist(world.name, info[0]);
-                    if (dist < distance) {
-                        distance = dist;
-                        best = world;
-                    }
-                    if (dist == 0 || page >= 5) needsToEnd = true;
-                } else break;
-            }
-            if (needsToEnd) {
-                callback([info[0], distance, best]);
-            } else {
-                searchWorlds(page + 1, [info[0], distance, best], callback);
-            }
-        }
-    };
-    xhttp.open('GET', global.serverUrl + ':5003/v1/worlds&name=' + info[0] + '&page=' + page, true);
-    xhttp.send();
+function sum(list) {
+    let sum = 0;
+    Object.keys(list).forEach(key => {
+        sum += list[key];
+    });
+    return sum;
 }
 
-function getDateDistance(t, n) {
-    let diff = Math.abs(n - t) / 1000;
-    let years = Math.floor(diff / 31536000);
-    let months = Math.floor(diff / 2592000);
-    let weeks = Math.floor(diff / 604800);
-    let days = Math.floor(diff / 86400);
-    let hours = Math.floor(diff / 3600) % 24;
-    let minutes = Math.floor(diff / 60) % 60;
-    let seconds = diff % 60;
-    if (years > 1) return years + " Years";
-    if (months > 2) return months + " Months";
-    if (weeks > 2) return weeks + " Weeks";
-    if (days > 1) return days + " Days";
-    if (hours > 1) return hours + " Hours";
-    if (minutes > 1) return minutes + " Minutes";
-    return Math.floor(seconds) + " Seconds";
+function time(t) {
+    let res = "";
+    let years = Math.floor(t / 31536000);
+    let months = Math.floor(t / 2592000);
+    let weeks = Math.floor(t / 604800);
+    let days = Math.floor(t / 86400);
+    let hours = Math.floor(t / 3600) % 24;
+    let minutes = Math.floor(t / 60) % 60;
+    let seconds = t % 60;
+    if (years > 1) res += years + " Years ";
+    // if (months > 2) return months + " Months";
+    // if (weeks > 2) return weeks + " Weeks";
+    if (days > 1) res += days + " Days ";
+    if (hours > 1) res += hours + " Hours ";
+    if (minutes > 1) res += minutes + " Minutes ";
+    // return Math.floor(seconds) + " Seconds";
+    return res;
 }
 
 module.exports = {
@@ -93,12 +78,50 @@ module.exports = {
         //     .setRequired(false)
         //     .setDescription('Use your api token (/api ingame)')),
 	async execute(interaction) {
-        const profileEmbed = new EmbedBuilder();
         let name = interaction.options.getString('name').replace(/[^[\x00-\x7F]+$/g, "");
         if (name.length == 0) {
-            interaction.reply('Player not found, or not specified');
+            interaction.reply('Player not specified');
             return;
         }
-        interaction.reply('not implemented');
+        let players = global.arthurdb.get('deepworld.players');
+        let arrayToSort = Object.entries(players).map(([key, value]) => ({key, value}));
+        let match = {};
+        let matchfound = false;
+        arrayToSort.forEach((val) => {
+            let item = val.value;
+            if (val.key.toLowerCase() == name.toLowerCase()) {
+                match = item;
+                matchfound = true;
+            }
+        });
+        if (match) {
+            let stats = match.statistics;
+            let kills = sum(match.statistics.kills || 0);
+            const profileEmbed = new EmbedBuilder()
+                .setTitle(match.orders.crow > 0 ? 
+                    match.name + " " + crow[match.orders.crow - 1] : match.name)
+                .setDescription(
+                    match.admin ? "Administrator\n" : "" 
+                    + "Level " + match.level + " (Skill Level " + match.skill_level + ")"
+                    + "\n" + (match.deaths || 0) + " Deaths - " + kills + " Kills"
+                    + "\nK/D Ratio: " + (Math.round(kills / match.deaths * 100) / 100))
+                .addFields([
+                    { inline: true, name: "Explored Areas", value: `${stats.areas_explored || 0}` },
+                    { inline: true, name: "Shillings Spent", value: `${stats.shillings_spent_in_scrap_market || 0}`},
+                    { inline: true, name: "Dungeon Raids", value: `${stats.dungeons_raided || 0}` },
+                    { inline: true, name: "Repaired Teles", value: `${stats.discoveries["mechanical/teleporter"] || 0}` },
+                    { inline: true, name: "Items Mined", value: `${match.items_mined || 0}` },
+                    { inline: true, name: "Items Crafted", value: `${match.items_crafted || 0}` },
+                    { inline: true, name: "Items Placed", value: `${match.items_placed || 0}` },
+                ])
+                .setColor(match.orders.crow > 0 ? 
+                    crow_color[match.orders.crow - 1] :
+                    match.appearance["h*"])
+                .setFooter({ text: `Time Playing: ${time(stats.play_time)}` })
+            interaction.reply({ embeds: [profileEmbed] });
+        } else {
+            interaction.reply('Player not found');
+            return;
+        }
 	},
 };

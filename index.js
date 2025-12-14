@@ -240,7 +240,10 @@ global.bot.on(Events.InteractionCreate, async interaction => {
     try {
         await global.bot.commands.get(interaction.commandName).execute(interaction);
     } catch (e) {
-        if (interaction.user.id === config.bot.owner) await interaction.reply({ content: `Error: ${e}`, flags: MessageFlags.Ephemeral });
+        if (interaction.user.id === config.bot.owner) { 
+            console.warn(e);
+            await interaction.reply({ content: `Error: ${e}`, flags: MessageFlags.Ephemeral });
+        }
     }
 });
 
