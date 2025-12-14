@@ -38,6 +38,7 @@ module.exports = {
         let mining_data = removedAdmins.toSorted((a, b) => (a.items_mined > b.items_mined) ? -1 : 1);
         let crafting_data = removedAdmins.toSorted((a, b) => (a.items_crafted > b.items_crafted) ? -1 : 1);
         let building_data = removedAdmins.toSorted((a, b) => (a.items_placed > b.items_placed) ? -1 : 1);
+        console.log(mining_data);
         const leaderboard = new EmbedBuilder()
             .setTitle(`Leaderboard`)
             .setDescription(desc)
