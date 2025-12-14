@@ -31,21 +31,22 @@ module.exports = {
             default:
         }
         let players = global.arthurdb.get('deepworld.players');
-        let mining_data = players.toSorted((a, b) => {
+        let arrayToSort = Object.entries(players).map(([key, value]) => ({key, value}));
+        let mining_data = arrayToSort.toSorted((a, b) => {
             if (a.admin & !b.admin) 1;
             if (b.admin & !a.admin) -1;
             if (a.items_mined > b.items_mined) -1;
             else if (a.items_mined < b.items_mined) 1;
             else 0;
         });
-        let crafting_data = players.toSorted((a, b) => {
+        let crafting_data = arrayToSort.toSorted((a, b) => {
             if (a.admin & !b.admin) 1;
             if (b.admin & !a.admin) -1;
             if (a.items_crafted > b.items_crafted) -1;
             else if (a.items_crafted < b.items_crafted) 1;
             else 0;
         })
-        let building_data = players.toSorted((a, b) => {
+        let building_data = arrayToSort.toSorted((a, b) => {
             if (a.admin & !b.admin) 1;
             if (b.admin & !a.admin) -1;
             if (a.items_placed > b.items_placed) -1;
