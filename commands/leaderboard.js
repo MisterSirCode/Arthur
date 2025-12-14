@@ -30,33 +30,14 @@ module.exports = {
         }
         let players = global.arthurdb.get('deepworld.players');
         let arrayToSort = Object.entries(players).map(([key, value]) => ({key, value}));
-        let mining_data = arrayToSort.toSorted((aitem, bitem) => {
-            let a = aitem.value;
-            let b = bitem.value;
-            if (a.admin & !b.admin) 1;
-            if (b.admin & !a.admin) -1;
-            if (a.items_mined > b.items_mined) -1;
-            else if (a.items_mined < b.items_mined) 1;
-            else 0;
+        let removedAdmins = [];
+        arrayToSort.forEach((val) => {
+            let item = val.value;
+            if (!item.admin) removedAdmins.push(item);
         });
-        let crafting_data = arrayToSort.toSorted((aitem, bitem) => {
-            let a = aitem.value;
-            let b = bitem.value;
-            if (a.admin & !b.admin) 1;
-            if (b.admin & !a.admin) -1;
-            if (a.items_crafted > b.items_crafted) -1;
-            else if (a.items_crafted < b.items_crafted) 1;
-            else 0;
-        });
-        let building_data = arrayToSort.toSorted((aitem, bitem) => {
-            let a = aitem.value;
-            let b = bitem.value;
-            if (a.admin & !b.admin) 1;
-            if (b.admin & !a.admin) -1;
-            if (a.items_placed > b.items_placed) -1;
-            else if (a.items_placed < b.items_placed) 1;
-            else 0;
-        });
+        let mining_data = removedAdmins.toSorted((a, b) => (a.items_mined > b.items_mined) ? -1 : 1);
+        let crafting_data = removedAdmins.toSorted((a, b) => (a.items_crafted > b.items_crafted) ? -1 : 1);
+        let building_data = removedAdmins.toSorted((a, b) => (a.items_placed > b.items_placed) ? -1 : 1);
         const leaderboard = new EmbedBuilder()
             .setTitle(`Leaderboard`)
             .setDescription(desc)
