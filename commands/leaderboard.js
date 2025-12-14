@@ -22,7 +22,7 @@ module.exports = {
         ),
 	async execute(interaction) {
         let desc = '';
-        switch (interaction.options.getCommand()) {
+        switch (interaction.options.getSubcommand()) {
             case 'mining_placing_crafting':
                 desc = 'Leaderboards for mining, crafting, and building'
                 break;
