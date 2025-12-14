@@ -7,7 +7,7 @@ const colors = require('colors');
 const os = require('os');
 const fs = require('fs');
 const path = require('path');
-const commandFiles = 'guild help ping user world online induct register player'.split(' ');
+const commandFiles = 'guild help ping user world online induct register player leaderboard'.split(' ');
 let XMLHttpRequest = require('xhr2');
 let envconfpath = path.join(__dirname, './.env');
 let active = {
@@ -177,6 +177,7 @@ async function getPlayers() {
         repeat(1, [], [], (list, names) => {
             global.arthurdb.set(`deepworld.raw_players`, list);
             global.arthurdb.set(`deepworld.player_names`, names);
+            resolve();
         })
     } catch(e) {
 
@@ -373,8 +374,9 @@ global.bot.on(Events.MessageCreate, async message => {
             if (intcom('force_player_refresh')) {
                 try {
                     message.reply('Loading...');
-                    getPlayers();
-                    message.reply(global.arthurdb.get(`deepworld.player_names`).length + " Players Loaded");
+                    getPlayers().then(() => {
+                        message.reply(global.arthurdb.get(`deepworld.player_names`).length + " Players Loaded");
+                    })
                 } catch(e) {
                     await message.reply('Eval failed with error: ' + e);
                 }
@@ -382,8 +384,9 @@ global.bot.on(Events.MessageCreate, async message => {
             if (intcom('force_grab_playerinfo')) {
                 try {
                     message.reply('Loading...');
-                    get_advanced_player_info();
-                    message.reply("Updating player statistics for " + global.arthurdb.get(`deepworld.players`).length + " Players");
+                    get_advanced_player_info().then(() => {    
+                        message.reply("Updating player statistics for " + global.arthurdb.get(`deepworld.players`).length + " Players");
+                    });
                 } catch(e) {
                     await message.reply('Eval failed with error: ' + e);
                 }

@@ -12,7 +12,7 @@ function topTenString(list, target) {
 }
 
 module.exports = {
-    local: false,
+    local: true,
 	data: new SlashCommandBuilder()
 		.setName('leaderboard')
 		.setDescription('Get the leaderboard of certain topics')
