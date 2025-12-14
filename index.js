@@ -313,6 +313,14 @@ global.bot.on(Events.MessageCreate, async message => {
                     });
                 });
             }
+            if (intcom('use_locals')) {
+                await message.reply(`Adding local commands to this server...`);
+                rest.put(Routes.applicationCommands(global.bot.user.id), { body: global.globals }).then( async (e) => {
+                    rest.put(Routes.applicationGuildCommands(global.bot.user.id, message.guild.id), { body: global.locals }).then( async () => {
+                        await message.channel.send((global.commands.length) + ' slash commands Updated');
+                    });
+                });
+            }
             if (intcom('reset')) {
                 await message.reply(`Deleting REST commands...`);
                 rest.put(Routes.applicationCommands(global.bot.user.id), { body: [] }).then( async () => {
