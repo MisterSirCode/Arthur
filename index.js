@@ -95,7 +95,7 @@ async function announceWorld() {
         'deep': ['Deep', 'https://cdn.discordapp.com/attachments/1041397042582388919/1323794949602283652/deep.png']
     }
     let channel = global.bot.channels.cache.get('416409883592884225');
-    let channel2 = global.bot.channels.cache.get('1391510758734561493');
+    let channel2 = global.bot.channels.cache.get('1449554892329848956');
 
     try {
         await channel.messages.fetch({limit: 5}).then((messages) => {
