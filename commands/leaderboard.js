@@ -3,7 +3,7 @@ const { EmbedBuilder, SlashCommandBuilder, MessageFlags } = require('discord.js'
 function topTenString(list, target) {
     let finished = "";
     for (let i = 0; i < 10; i++) {
-        let item = list[i];
+        let item = list[i].value;
         finished += item.name + ' - ' + item[target] + '\n';
     }
     return finished;
