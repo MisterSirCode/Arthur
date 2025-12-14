@@ -374,6 +374,7 @@ global.bot.on(Events.MessageCreate, async message => {
                 try {
                     message.reply('Loading...');
                     getPlayers();
+                    message.reply(playerList.length + " Players Loaded");
                 } catch(e) {
                     await message.reply('Eval failed with error: ' + e);
                 }
@@ -382,6 +383,7 @@ global.bot.on(Events.MessageCreate, async message => {
                 try {
                     message.reply('Loading...');
                     get_advanced_player_info();
+                    message.reply(playerList.length + " Players Loaded");
                 } catch(e) {
                     await message.reply('Eval failed with error: ' + e);
                 }
