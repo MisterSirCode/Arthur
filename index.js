@@ -383,7 +383,7 @@ global.bot.on(Events.MessageCreate, async message => {
                 try {
                     message.reply('Loading...');
                     get_advanced_player_info().then(() => {    
-                        message.reply("Updating player statistics for " + global.arthurdb.get(`deepworld.players`).length + " Players");
+                        message.reply("Updated player statistics for " + Object.keys(global.arthurdb.get(`deepworld.players`)).length + " Players");
                     });
                 } catch(e) {
                     await message.reply('Eval failed with error: ' + e);
