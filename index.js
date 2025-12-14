@@ -374,7 +374,7 @@ global.bot.on(Events.MessageCreate, async message => {
                 try {
                     message.reply('Loading...');
                     getPlayers();
-                    message.reply(playerList.length + " Players Loaded");
+                    message.reply(global.arthurdb.get(`deepworld.player_names`).length + " Players Loaded");
                 } catch(e) {
                     await message.reply('Eval failed with error: ' + e);
                 }
@@ -383,7 +383,7 @@ global.bot.on(Events.MessageCreate, async message => {
                 try {
                     message.reply('Loading...');
                     get_advanced_player_info();
-                    message.reply(playerList.length + " Players Loaded");
+                    message.reply("Updating player statistics for " + global.arthurdb.get(`deepworld.players`).length + " Players");
                 } catch(e) {
                     await message.reply('Eval failed with error: ' + e);
                 }
