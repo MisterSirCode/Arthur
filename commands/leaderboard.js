@@ -51,15 +51,14 @@ module.exports = {
             else if (a.items_placed < b.items_placed) 1;
             else 0;
         });
-        console.log(mining_data);
         const leaderboard = new EmbedBuilder()
             .setTitle(`Leaderboard`)
             .setDescription(desc)
 			.setColor(global.color);
         leaderboard.addFields(
-            { name: 'Blocks Mined', value: topTenString(mining_data), inline: true, },
-            { name: 'Items Crafted', value: topTenString(crafting_data), inline: true, },
-            { name: 'Blocks Placed', value: topTenString(building_data), inline: true, },
+            { name: 'Blocks Mined', value: topTenString(mining_data, "items_mined"), inline: true, },
+            { name: 'Items Crafted', value: topTenString(crafting_data, "items_crafted"), inline: true, },
+            { name: 'Blocks Placed', value: topTenString(building_data, "items_placed"), inline: true, },
         )
 		await interaction.reply({ embeds: [leaderboard], flags: MessageFlags.Ephemeral });
 	},
