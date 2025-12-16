@@ -38,6 +38,7 @@ module.exports = {
         let mining_data = removedAdmins.toSorted((a, b) => (a.items_mined > b.items_mined) ? -1 : 1);
         let crafting_data = removedAdmins.toSorted((a, b) => (a.items_crafted > b.items_crafted) ? -1 : 1);
         let building_data = removedAdmins.toSorted((a, b) => (a.items_placed > b.items_placed) ? -1 : 1);
+        let scaving_data = removedAdmins.toSorted((a, b) => (a.items_scavenged > b.items_scavenged) ? -1 : 1);
         const leaderboard = new EmbedBuilder()
             .setTitle(`Leaderboard`)
             .setDescription(desc)
@@ -46,6 +47,7 @@ module.exports = {
             { name: 'Blocks Mined', value: topTenString(mining_data, "items_mined"), inline: true, },
             { name: 'Items Crafted', value: topTenString(crafting_data, "items_crafted"), inline: true, },
             { name: 'Blocks Placed', value: topTenString(building_data, "items_placed"), inline: true, },
+            { name: 'Items Scavenged', value: topTenString(scaving_data, "items_scavenged"), inline: true, },
         )
 		await interaction.reply({ embeds: [leaderboard] });
 	},
