@@ -51,9 +51,8 @@ module.exports = {
                 } else {
                     interaction.reply({ content: 'Error retrieving username. May be invalid.', flags: MessageFlags.Ephemeral });
                 }
-                return;
             });
-            interaction.reply({ content: 'Error registering. Contact the developer.', flags: MessageFlags.Ephemeral });
+            // interaction.reply({ content: 'Error registering. Contact the developer.', flags: MessageFlags.Ephemeral });
         }
 	},
 };
