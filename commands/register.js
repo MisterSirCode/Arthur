@@ -12,6 +12,7 @@ function getPlayer(name, token, callback) {
         }
     };
     xhttp.open('GET', global.serverUrl + ':5001/players/' + name + '?api_token=' + token, true);
+    console.log(global.serverUrl + ':5001/players/' + name + '?api_token=' + token);
     xhttp.send();
 }
 
@@ -40,6 +41,7 @@ module.exports = {
             getPlayer(name, token, (valid, data) => {
                 if (valid) {
                     if (data.token_validated) {
+                        // data['discord'] = interaction.user.id;
                         global.arthurdb.set(`deepworld.players.${data.name}`, data);
                         global.arthurdb.set(`deepworld.player_tokens.${data.name}`, token);
                         interaction.reply({ content: 'Done! You are now added to the database!', flags: MessageFlags.Ephemeral });
@@ -49,7 +51,9 @@ module.exports = {
                 } else {
                     interaction.reply({ content: 'Error retrieving username. May be invalid.', flags: MessageFlags.Ephemeral });
                 }
+                return;
             });
+            interaction.reply({ content: 'Error registering. Contact the developer.', flags: MessageFlags.Ephemeral });
         }
 	},
 };

@@ -374,7 +374,7 @@ global.bot.on(Events.MessageCreate, async message => {
                     await message.reply('Eval failed with error: ' + e);
                 }
             }
-            if (intcom('force_player_refresh')) {
+            if (intcom('get_players')) {
                 try {
                     message.reply('Loading...');
                     getPlayers().then(() => {
@@ -384,7 +384,7 @@ global.bot.on(Events.MessageCreate, async message => {
                     await message.reply('Eval failed with error: ' + e);
                 }
             }
-            if (intcom('force_grab_playerinfo')) {
+            if (intcom('get_playerinfo')) {
                 try {
                     message.reply('Loading...');
                     get_advanced_player_info().then(() => {    

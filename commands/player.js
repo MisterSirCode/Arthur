@@ -96,7 +96,8 @@ module.exports = {
         });
         if (match) {
             let stats = match.statistics;
-            let kills = sum(match.statistics.kills || 0);
+            let kills = sum(match.statistics.kills || {}) || 0;
+            let kd = (Math.round(kills / match.deaths * 100) / 100);
             const profileEmbed = new EmbedBuilder()
                 .setTitle(match.orders.crow > 0 ? 
                     match.name + " " + crow[match.orders.crow - 1] : match.name)
@@ -104,7 +105,7 @@ module.exports = {
                     match.admin ? "Administrator\n" : "" 
                     + "Level " + match.level + " (Skill Level " + match.skill_level + ")"
                     + "\n" + (match.deaths || 0) + " Deaths - " + kills + " Kills"
-                    + "\nK/D Ratio: " + (Math.round(kills / match.deaths * 100) / 100))
+                    + "\nK/D Ratio: " + (isNaN(kd) ? 0 : kd))
                 .addFields([
                     { inline: true, name: "Explored Areas", value: `${stats.areas_explored || 0}` },
                     { inline: true, name: "Shillings Spent", value: `${stats.shillings_spent_in_scrap_market || 0}`},
@@ -113,11 +114,22 @@ module.exports = {
                     { inline: true, name: "Items Mined", value: `${match.items_mined || 0}` },
                     { inline: true, name: "Items Crafted", value: `${match.items_crafted || 0}` },
                     { inline: true, name: "Items Placed", value: `${match.items_placed || 0}` },
+                    { inline: true, name: "Items Scavenged", value: `${match.items_scavenged || 0}` },
                 ])
                 .setColor(match.orders.crow > 0 ? 
                     crow_color[match.orders.crow - 1] :
                     match.appearance["h*"])
-                .setFooter({ text: `Time Playing: ${time(stats.play_time)}` })
+                .setFooter({ text: `Time Playing: ${time(stats.play_time)}` });
+            if ((stats.discoveries["mechanical/teleporter"] || 0) > 0) {
+                stats.discoveries["mechanical/teleporter"] = 0;
+                profileEmbed.addFields(
+                    { inline: true, name: "Machine Parts", value: `${sum(stats.discoveries) || 0}` },
+                );
+            } else {
+                profileEmbed.addFields(
+                    { inline: true, name: "Machine Parts", value: `0` },
+                );
+            }
             interaction.reply({ embeds: [profileEmbed] });
         } else {
             interaction.reply('Player not found');
